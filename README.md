@@ -1,4 +1,4 @@
-arduino
+Arduino
 =======
 
-Various Arduino Project
+This repository groups several interesting project of mine on Arduino.
