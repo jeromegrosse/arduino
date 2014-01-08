@@ -124,6 +124,14 @@ LedArray::LedArray(int row[], int col[], int width, int height){
     }
 }
 
+/*
+ * Set a shift for the letters.
+ * int shift: Shift for the letter. A positive shift value shifts the letter to the left.
+ */
+void LedArray::set_shift(int shift){
+    _shift = shift;
+}
+
 
 /*
  * Turns the display blank (no led turned on).
@@ -193,7 +201,10 @@ void LedArray::display_line(byte data, int row_number){
 void LedArray::display_screen(byte* data, bool reverse){
     if(!reverse) return display_screen(data);
     for(int i = 0; i < _height; i++){
-        display_line(reverse_byte(data[i]), i);
+        if(_shift < 0)
+            display_line(reverse_byte(data[i]) << (0 - _shift), i);
+        else
+            display_line(reverse_byte(data[i]) >> _shift, i);
     }
 }
 
@@ -203,7 +214,10 @@ void LedArray::display_screen(byte* data, bool reverse){
  */
 void LedArray::display_screen(byte* data){
     for(int i = 0; i < _height; i++){
-        display_line(data[i], i);
+        if(_shift < 0)
+            display_line(reverse_byte(data[i]) << (0 - _shift), i);
+        else
+            display_line(reverse_byte(data[i]) >> _shift, i);
     }
 }
 

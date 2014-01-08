@@ -33,5 +33,6 @@ void setup(){
 
 void loop(){
     timestamp_2 = millis();
-    ledArray.print_string("TestDisplay", 11, 750);
+    ledArray.set_shift(1);
+    ledArray.print_string("TestDisplay!", 12, 750);
 }

@@ -20,6 +20,8 @@ class LedArray
         byte reverse_byte(byte x);
         void print_letter(char c);
         void print_string(char c[], int amount, int time);
+        void print_string_width_shift(char c[], int amount, int time, int shift);
+        void set_shift(int shift);
     private:
         unsigned int _timestamp;
         int*         _row;
@@ -27,6 +29,7 @@ class LedArray
         int          _width;
         int          _height;
         byte**       _charset;
+        int         _shift;
 
         void display_line(byte data, int row_number);
 };
