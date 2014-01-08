@@ -22,6 +22,7 @@ class LedArray
         void print_string(char c[], int amount, int time);
         void print_string_width_shift(char c[], int amount, int time, int shift);
         void set_shift(int shift);
+        void slide_string(char c[], int amount, int speed);
     private:
         int*         _row;
         int*         _col;

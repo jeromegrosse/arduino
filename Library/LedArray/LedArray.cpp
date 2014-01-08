@@ -252,3 +252,55 @@ void LedArray::print_string(char c[], int amount, int time){
     int letter = (millis()/time) % amount;
     print_letter(c[letter]);
 }
+
+
+void LedArray::slide_string(char c[], int amount, int speed){
+    byte screen[_height];
+    int state = (millis()/speed) % (amount*_width);
+
+    int arr_state_c_offset[] = { (state + 0)/_width % amount,
+                                 (state + 1)/_width % amount,
+                                 (state + 2)/_width % amount,
+                                 (state + 3)/_width % amount,
+                                 (state + 4)/_width % amount,
+                                 (state + 5)/_width % amount,
+                                 (state + 6)/_width % amount,
+                                 (state + 7)/_width % amount };
+
+    int arr_state_shift_offset[] = { (state + 0) % _width,
+                                     (state + 1) % _width,
+                                     (state + 2) % _width,
+                                     (state + 3) % _width,
+                                     (state + 4) % _width,
+                                     (state + 5) % _width,
+                                     (state + 6) % _width,
+                                     (state + 7) % _width };
+
+    // Method 1: A new for will be needed within display_screen to display the data.
+    // for(int i = 0; i < _height; i++){
+    //     screen[i] = (charset[c[arr_state_c_offset[0]] - ' '][i] << arr_state_shift_offset[0] & 0x80)
+    //               | (charset[c[arr_state_c_offset[1]] - ' '][i] << arr_state_shift_offset[1] & 0x40)
+    //               | (charset[c[arr_state_c_offset[2]] - ' '][i] << arr_state_shift_offset[2] & 0x20)
+    //               | (charset[c[arr_state_c_offset[3]] - ' '][i] << arr_state_shift_offset[3] & 0x10)
+    //               | (charset[c[arr_state_c_offset[4]] - ' '][i] << arr_state_shift_offset[4] & 0x08)
+    //               | (charset[c[arr_state_c_offset[5]] - ' '][i] << arr_state_shift_offset[5] & 0x04)
+    //               | (charset[c[arr_state_c_offset[6]] - ' '][i] << arr_state_shift_offset[6] & 0x02)
+    //               | (charset[c[arr_state_c_offset[7]] - ' '][i] << arr_state_shift_offset[7] & 0x01);
+    // }
+
+    //  display_screen(screen);
+
+    /* Method 2: No new for needed but we lose granualirty but we have less flickr due to higher scanline rate. */
+    for(int i = 0; i < _height; i++){
+            int screenz = (charset[c[arr_state_c_offset[0]] - ' '][i] << arr_state_shift_offset[0] & 0x80)
+                        | (charset[c[arr_state_c_offset[1]] - ' '][i] << arr_state_shift_offset[1] & 0x40)
+                        | (charset[c[arr_state_c_offset[2]] - ' '][i] << arr_state_shift_offset[2] & 0x20)
+                        | (charset[c[arr_state_c_offset[3]] - ' '][i] << arr_state_shift_offset[3] & 0x10)
+                        | (charset[c[arr_state_c_offset[4]] - ' '][i] << arr_state_shift_offset[4] & 0x08)
+                        | (charset[c[arr_state_c_offset[5]] - ' '][i] << arr_state_shift_offset[5] & 0x04)
+                        | (charset[c[arr_state_c_offset[6]] - ' '][i] << arr_state_shift_offset[6] & 0x02)
+                        | (charset[c[arr_state_c_offset[7]] - ' '][i] << arr_state_shift_offset[7] & 0x01);
+
+            display_line(reverse_byte(screenz) << (0 - _shift), i);
+         }
+}

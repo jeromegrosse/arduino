@@ -47,7 +47,8 @@ void setup(){
 }
 
 void loop(){
-    ledArray.set_shift(1);
-    char* string_to_print = "TestDisplay!";
-    ledArray.print_string(string_to_print, strlen(string_to_print), 500);
+    //ledArray.set_shift(1);
+    char* string_to_print = "Test Display!   ";
+    ledArray.slide_string(string_to_print, strlen(string_to_print), 25);
+    //ledArray.print_string(string_to_print, strlen(string_to_print), 500);
 }
