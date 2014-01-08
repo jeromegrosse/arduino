@@ -71,6 +71,13 @@ void LedArray::display_line(byte data, int row_number){
 
 
 //Given an array of byte, display them on the display
+void LedArray::display_screen(byte* data, bool reverse){
+    if(!reverse) return display_screen(data);
+    for(int i = 0; i < _height; i++){
+        display_line(reverse_byte(data[i]), i);
+    }
+}
+
 void LedArray::display_screen(byte* data){
     for(int i = 0; i < _height; i++){
         display_line(data[i], i);

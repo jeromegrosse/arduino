@@ -15,6 +15,7 @@ class LedArray
         LedArray(int row[], int col[], int width, int height);
         void clear_display();
         void default_display();
+        void display_screen(byte* data, bool reverse);
         void display_screen(byte* data);
         byte reverse_byte(byte x);
     private:
