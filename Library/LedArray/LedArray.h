@@ -18,12 +18,16 @@ class LedArray
         void display_screen(byte* data, bool reverse);
         void display_screen(byte* data);
         byte reverse_byte(byte x);
+        void print_letter(char c);
+        void print_string(char c[], int amount, int time);
     private:
         unsigned int _timestamp;
-        int* _row;
-        int* _col;
-        int  _width;
-        int  _height;
+        int*         _row;
+        int*         _col;
+        int          _width;
+        int          _height;
+        byte**       _charset;
+
         void display_line(byte data, int row_number);
 };
 
