@@ -23,7 +23,6 @@ class LedArray
         void print_string_width_shift(char c[], int amount, int time, int shift);
         void set_shift(int shift);
     private:
-        unsigned int _timestamp;
         int*         _row;
         int*         _col;
         int          _width;

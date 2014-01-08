@@ -109,7 +109,6 @@ byte charset[96][8] = {
  * int height: Height of the display.
  */
 LedArray::LedArray(int row[], int col[], int width, int height){
-    _timestamp = millis();
     _row    = row;
     _col    = col;
     _width  = width;
@@ -171,8 +170,7 @@ void LedArray::default_display(){
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
     };
 
-    unsigned int timestamp_2 = millis();
-    display_screen(arr_screen[ (timestamp_2 - _timestamp)/1000  % (2*_height)], false);
+    display_screen(arr_screen[ millis()/1000  % (2*_height)], false);
 }
 
 
@@ -251,6 +249,6 @@ void LedArray::print_letter(char c){
  * int time  : Interval between each letters in millisecond.
  */
 void LedArray::print_string(char c[], int amount, int time){
-    unsigned int timestamp_2 = millis();
-    print_letter(c[ ((timestamp_2 - _timestamp)/time) % amount]);
+    int letter = (millis()/time) % amount;
+    print_letter(c[letter]);
 }

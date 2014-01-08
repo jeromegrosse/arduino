@@ -42,17 +42,12 @@ int col[] = {col1, col2, col3, col4, col5, col6, col7, col8};
 
 LedArray ledArray(row, col, 8, 8);
 
-//Timing variable
-unsigned int timestamp_1 = millis();
-unsigned int timestamp_2;
-
-
 void setup(){
   ledArray.clear_display();
 }
 
 void loop(){
-    timestamp_2 = millis();
     ledArray.set_shift(1);
-    ledArray.print_string("TestDisplay!", 12, 750);
+    char* string_to_print = "TestDisplay!";
+    ledArray.print_string(string_to_print, strlen(string_to_print), 500);
 }
