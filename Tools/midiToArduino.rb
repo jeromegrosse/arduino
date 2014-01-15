@@ -17,7 +17,11 @@ else
 end
 
 threshold = ARGV.index '--threshold'
-threshold = ARGV[threshold + 1].to_i if threshold != nil
+if threshold != nil
+    threshold = ARGV[threshold + 1].to_i
+else
+    threshold = 400
+end
 
 #Initialization and information display
 seq = MIDI::Sequence.new()
@@ -48,10 +52,6 @@ seq.each_with_index do |track, i|
 
     if i == track_num
         track.each do |e|
-            if threshold < arr_note_data.length
-                break
-            end
-
             e.print_decimal_numbers = true
             e.print_note_names = true
 
@@ -92,6 +92,10 @@ arr_note_data.each_with_index do |note_data, index|
         arr_duration << note_data['timestamp']
     end
 
+    if threshold < arr_note.length
+        break
+    end
+
     arr_note     << note_data['note']
     arr_duration << note_data['duration']
 
@@ -122,11 +126,11 @@ if do_output != nil
         end
 
         sketch << "};\n"
-        sketch << "int number_of_note = #{arr_note.length};"
+        sketch << "int number_of_note = #{arr_note.length};\n\n"
 
         sketch << "void setup(){}\n\nvoid loop(){\n\n"
 
-        sketch << "  for (int thisNote = 0; thisNote < number_of_note; thisNote++) {\n    int noteDuration = noteDurations[thisNote];\n    tone(8, melody[thisNote],noteDuration);\n    int pauseBetweenNotes = noteDuration * 1.30;\n    delay(pauseBetweenNotes);\n    noTone(8);\n  }\n"
+        sketch << "  for (int thisNote = 0; thisNote < number_of_note; thisNote++) {\n    int noteDuration = noteDurations[thisNote];\n    tone(8, melody[thisNote],noteDuration);\n    int pauseBetweenNotes = noteDuration;\n    delay(pauseBetweenNotes);\n    noTone(8);\n  }\n"
 
         sketch << "}"
         out = File.open ARGV[do_output + 1], "w"
@@ -136,18 +140,3 @@ if do_output != nil
         puts "No output file provided"
     end
 end
-
-
-
-
-
-# seq.each do |track|
-#   puts "*** track name \"#{track.name}\""
-#   puts "instrument name \"#{track.instrument}\""
-#   puts "#{track.events.length} events"
-#   track.each do |e|
-#     e.print_decimal_numbers = true # default = false (print hex)
-#     e.print_note_names = true # default = false (print note numbers)
-#     puts e
-#   end
-# end
