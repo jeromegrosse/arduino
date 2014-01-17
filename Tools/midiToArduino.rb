@@ -136,7 +136,21 @@ if do_output != nil
         out = File.open ARGV[do_output + 1], "w"
         out.write sketch
         out.close
-    else
-        puts "No output file provided"
     end
+else
+    sketch = ""
+    sketch << "int melody[] = {"
+    arr_note.each do |note|
+        sketch << "NOTE_#{note},".gsub('#', 'S')
+    end
+
+    sketch << "};\n\nint noteDurations[] = {"
+    arr_duration.each do |duration|
+        sketch << "#{duration},"
+    end
+
+    sketch << "};\n"
+    sketch << "int number_of_note = #{arr_note.length};\n\n"
+
+    puts sketch;
 end
