@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 require 'midilib/sequence'
 
-usage = "Usage:\nruby midiToArduino.rb midi_file [--threshold threshold] [--arduinofile arduino_file]"
+usage = "Usage:\nruby midiToArduino.rb midi_file [--timestamps] [--threshold threshold] [--arduinofile arduino_file]"
 
 #Argument checks
 if ARGV.length < 1
@@ -22,6 +22,8 @@ if threshold != nil
 else
     threshold = 400
 end
+
+with_timestamps = (ARGV.index '--timestamps') != nil
 
 #Initialization and information display
 seq = MIDI::Sequence.new()
@@ -89,7 +91,11 @@ arr_duration = Array.new
 arr_note_data.each_with_index do |note_data, index|
     if index == 0 && note_data['timestamp'] != 0
         arr_note     << 0
-        arr_duration << note_data['timestamp']
+        if with_timestamps
+            arr_duration << 0
+        else
+            arr_duration << note_data['timestamp']
+        end
     end
 
     if threshold < arr_note.length
@@ -97,11 +103,17 @@ arr_note_data.each_with_index do |note_data, index|
     end
 
     arr_note     << note_data['note']
-    arr_duration << note_data['duration']
+
+    if with_timestamps
+        arr_duration << note_data['timestamp']
+    else
+        arr_duration << note_data['duration']
+    end
 
     if note_data != arr_note_data.last && note_data['timestamp'] + note_data['duration'] != arr_note_data[index + 1]['timestamp']
+        timestamp_shift = with_timestamps ? arr_duration.last : 0
         arr_note << 0
-        arr_duration << (arr_note_data[index + 1]['timestamp'] - note_data['timestamp'] - note_data['duration'])
+        arr_duration << timestamp_shift + (arr_note_data[index + 1]['timestamp'] - note_data['timestamp'] - note_data['duration'])
     end
 end
 
